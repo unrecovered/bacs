@@ -27,7 +27,7 @@ public class bacs{
 	
 	static long start = System.nanoTime();
 	
-	public static volatile bacunit[][] battlefield;// = new bacunit[dimension][dimension];
+	public static volatile bacunit[][] battlefield;// = new BacUnit[dimension][dimension];
 	
 	public static JFrame window;
 	
@@ -147,25 +147,25 @@ public class bacs{
       
         bacs.itermax = ini.get("settings", "iterations", int.class);
         
-        //bacunit
-        bacunit.actlim = ini.get("bacunit", "actlim", int.class);
+        //BacUnit
+        bacunit.actlim = ini.get("BacUnit", "actlim", int.class);
         
-        bacunit.relsence = ini.get("bacunit", "relsence", int.class);
+        bacunit.relsence = ini.get("BacUnit", "relsence", int.class);
         
-        bacunit.gainbase = ini.get("bacunit", "gainbase", int.class);
+        bacunit.gainbase = ini.get("BacUnit", "gainbase", int.class);
         
-        bacunit.lumus = ini.get("bacunit", "light", boolean.class);
+        bacunit.lumus = ini.get("BacUnit", "light", boolean.class);
     }
     
     static void getMoreParameters() throws IOException{//порнография...
     	Wini ini = new Wini(new File("conf.ini"));
     	bacunit that = battlefield[dimension/2][dimension/2];
-    	that.stats.str = ini.get("bacunit", "str", int.class);
-    	that.stats.mutstat = ini.get("bacunit", "mutstat", int.class);
-    	that.stats.mutbeh = ini.get("bacunit", "mutbeh", int.class);
-    	that.stats.end = ini.get("bacunit", "end", int.class);
+    	that.stats.str = ini.get("BacUnit", "str", int.class);
+    	that.stats.mutstat = ini.get("BacUnit", "mutstat", int.class);
+    	that.stats.mutbeh = ini.get("BacUnit", "mutbeh", int.class);
+    	that.stats.end = ini.get("BacUnit", "end", int.class);
     	
-    	String beh = ini.get("bacunit", "behaviour", String.class);
+    	String beh = ini.get("BacUnit", "behaviour", String.class);
     	
     	beh = beh.replace("move", Integer.toString(bacunit.actlim));
     	beh = beh.replace("turn", Integer.toString(bacunit.actlim+1));

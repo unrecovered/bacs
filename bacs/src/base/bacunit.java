@@ -133,7 +133,7 @@ public class bacunit implements Cloneable{
 		if(lookup() == "corpse"){
 			this.energy += bacs.battlefield[dx][dy].energy/2;
 			bacs.battlefield[dx][dy] = new bacunit();
-			//bacs.battlefield[dx][dy].stats.clr = "000000";
+			//Bacs.battlefield[dx][dy].stats.clr = "000000";
 			return true;	
 		}else{
 			return false;
@@ -215,10 +215,10 @@ public class bacunit implements Cloneable{
 						mutcolor++;
 					}
 					
-					//that.stats.mutstat += bacs.getRandom(-1, 1);
-					//int intcolor = (int) Integer.parseInt(that.stats.clr, 16) + bacs.getRandom(0, 3);
+					//that.stats.mutstat += Bacs.getRandom(-1, 1);
+					//int intcolor = (int) Integer.parseInt(that.stats.clr, 16) + Bacs.getRandom(0, 3);
 					//that.stats.clr = Integer.toHexString(intcolor);
-					//that.stats.clr = Integer.toHexString(bacs.getRandom(1,16777214));
+					//that.stats.clr = Integer.toHexString(Bacs.getRandom(1,16777214));
 					
 				}
 				
@@ -230,7 +230,7 @@ public class bacunit implements Cloneable{
 				}
 				
 				
-				intcolor = (intcolor + (int)Math.pow(4, mutcolor)) % 16777214;// * bacs.getRandom(-1, 1); 
+				intcolor = (intcolor + (int)Math.pow(4, mutcolor)) % 16777214;// * Bacs.getRandom(-1, 1);
 				that.stats.clr = Integer.toHexString(intcolor);
 				
 			} catch (CloneNotSupportedException e) {
@@ -269,7 +269,7 @@ public class bacunit implements Cloneable{
 			this.stats.clr = "FFFFFF";
 		}else{
 			bacs.battlefield[x][y] = new bacunit();
-			//bacs.battlefield[x][y].stats.clr = "000000";
+			//Bacs.battlefield[x][y].stats.clr = "000000";
 		}
 			//System.out.println(x+" "+y+" died");
 	}
