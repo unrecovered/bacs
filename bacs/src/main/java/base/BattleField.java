@@ -1,6 +1,7 @@
 package base;
 
 /**
+ *  Игровое поле.
  * Created by valera on 08.03.17.
  */
 public class BattleField {
@@ -8,10 +9,13 @@ public class BattleField {
     private final BacUnit[][] cells;
 
     private final int dimension;
+
+    private final boolean useLight;
     
-    public BattleField(int dimension) {
+    public BattleField(int dimension, boolean useLight) {
         this.dimension = dimension;
         cells = new BacUnit[dimension][dimension];
+        this.useLight = useLight;
     }
 
     /**
@@ -36,5 +40,21 @@ public class BattleField {
         cells[centerRow][centerColumn].stats.end = 100;
         cells[centerRow][centerColumn].energy = 50;
         cells[centerRow][centerColumn].behaviour[0] = BacUnit.actlim + 3;
+    }
+
+    private int toNum(int x, int y) {
+        return y * dimension + x;
+    }
+
+    public double getLight(int x, int y) {
+        if (!useLight)
+            return 1;
+        int xc = dimension / 2;
+        int yc = dimension / 2;
+        int dx = xc - x;
+        int dy = yc - y;
+        double delta = Math.sqrt(dx*dx + dy*dy);
+        double maxDistance = Math.sqrt(2) * dimension / 2;
+        return (maxDistance - delta) / maxDistance;
     }
 }
