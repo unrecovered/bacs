@@ -10,20 +10,12 @@ import javax.swing.JFrame;
 import org.ini4j.Wini;
 
 public class Bacs {
-	public static String title = "Bacs v1.12";
+	private static String title = "Bacs v1.12";
 	
 	public static int iternum = 0;
-	
-	public static int itermax = 40000;
-	
-	public static int scale = 1;
-	
-	public static int cores = 2;//Runtime.getRuntime().availableProcessors();
-	
-	public static int dimension = 300;
-	
-	public static int actlim; 
-	
+
+	static Settings settings;
+
 	static long start = System.nanoTime();
 	
 	public static volatile BacUnit[][] battlefield;// = new BacUnit[dimension][dimension];
@@ -32,13 +24,14 @@ public class Bacs {
 	
 	
 	public static void main(String[] args) throws IOException { 
-		
-		getParameters();
+
+		settings = Settings.fromFile("conf.ini");
 		initpainting();
 
 		
 		window=new JFrame(title);
-		window.setSize(dimension*scale+15, dimension*scale+38);
+		int baseSize = settings.dimension * settings.scale;
+		window.setSize(baseSize + 15, baseSize + 38);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	 
 	/*	Менеджер определяет
@@ -46,7 +39,7 @@ public class Bacs {
 		window.setLayout(new BorderLayout(1,1));
 		
 		Canvas playfield=new Canvas();
-		playfield.setSize(dimension*scale, dimension*scale);
+		playfield.setSize(baseSize, baseSize);
         window.add(playfield);		
         window.setVisible(true);
         
@@ -54,28 +47,28 @@ public class Bacs {
         
     	initbattle();
 
-    	Iteration[] processes = new Iteration[cores];
+    	Iteration[] processes = new Iteration[settings.cores];
     	
-    	for(int i=0; i<cores; i++){
+    	for(int i=0; i< settings.cores; i++){
     		processes[i] = new Iteration();	//Создание потока
     	}
     	
-    	for(int i=0; i<cores; i++){
+    	for(int i=0; i<settings.cores; i++){
     		processes[i].isDaemon();
     		processes[i].start();
     	}
     	
-    	while(iternum<itermax){
+    	while(iternum < settings.maxIterations){
     		try {
     			Thread.sleep(16);
-        		window.setTitle(title+" Iteration "+iternum+" out of "+itermax+"("+iternum*100/itermax+"% done)");
+        		window.setTitle(title+ " Iteration " +iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
         		playfield.repaint();
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		} 		
 		}
     	
-    	window.setTitle(title+" Iteration "+iternum+" out of "+itermax+"(100% done)");
+    	window.setTitle(title + " Iteration " + iternum + " out of "+ settings.maxIterations + "(100% done)");
     	
     	float passed = (float)(System.nanoTime() - Bacs.start)/1000000000;
     	
@@ -87,15 +80,17 @@ public class Bacs {
 		
         try(FileWriter writer = new FileWriter("endgame.txt", false))
         {
-            String text = "";
+            StringBuilder text = new StringBuilder();
             for(int i=0; i<30; i++){
-            	BacUnit that = Bacs.battlefield[Bacs.getRandom(0, dimension-1)][Bacs.getRandom(0, dimension-1)];
-            	text+= "str="+that.stats.str+" end="+that.stats.end+" clr="+that.stats.clr+" mut="+that.stats.mut+" behaviour={ ";
-            	for(int j = 0; j< BacUnit.actlim; j++){text+=that.behaviour[j]+" ";}
-            	text+="}"+'\r'+'\n';
+            	BacUnit that = Bacs.battlefield[Bacs.getRandom(0, settings.dimension - 1)][Bacs.getRandom(0, settings.dimension - 1)];
+            	text.append("str=" + that.stats.str + " end=" + that.stats.end + " clr=" +that.stats.clr + " mut=" + that.stats.mut + " behaviour={ ");
+            	for(int j = 0; j< BacUnit.actlim; j++) {
+            	    text.append(that.behaviour[j] + " ");
+            	}
+            	text.append("}"+'\r'+'\n');
             }
-	    	text+="time: "+passed;
-            writer.write(text);
+	    	text.append("time: " + passed);
+            writer.write(text.toString());
         }
         catch(IOException ex){
              
@@ -103,75 +98,37 @@ public class Bacs {
         } 
 	}
 	
-	static void initbattle() throws IOException{
-		battlefield[dimension/2][dimension/2].stats.clr = "FF0000";
-		battlefield[dimension/2][dimension/2].direction = 0;
-		battlefield[dimension/2][dimension/2].stats.str = 1;
-		battlefield[dimension/2][dimension/2].stats.mut = 250;
-		battlefield[dimension/2][dimension/2].stats.end = 100;
-		battlefield[dimension/2][dimension/2].energy = 50;
-		battlefield[dimension/2][dimension/2].behaviour[0] = BacUnit.actlim+3;
-		getMoreParameters();
+	static void initbattle() throws IOException {
+	    BacUnit initial = battlefield[settings.dimension / 2][settings.dimension / 2];
+		initial.stats.clr = "FF0000";
+        initial.direction = 0;
+        initial.stats.str = 1;
+        initial.stats.mut = 250;
+        initial.stats.end = 100;
+        initial.energy = 50;
+        initial.behaviour[0] = settings.actLim + 3;
+        String[] behraw = settings.behaviour.split(":");
+        for(int i = 0; i<behraw.length; i++) {
+            initial.behaviour[i] = Integer.parseInt(behraw[i]);
+        }
+//		getMoreParameters();
 	}
 	
 	static void initpainting(){
-		battlefield = new BacUnit[dimension][dimension];
-		for(int i = 0; i< Bacs.dimension; i++){
-			for(int j = 0; j< Bacs.dimension; j++){
+		battlefield = new BacUnit[settings.dimension][settings.dimension];
+		for(int i = 0; i< Bacs.settings.dimension; i++){
+			for(int j = 0; j< Bacs.settings.dimension; j++){
 				battlefield[i][j] = new BacUnit();
 				battlefield[i][j].stats.clr = "000000";
 			}
 		}
 	}
 	
-	public static int getRandom(int min, int max)
+	static int getRandom(int min, int max)
 	{
 		return (int) (Math.floor(Math.random() * (max - min + 1)) + min);
 	}
-	
-    static void getParameters() throws IOException
-    {
-        Wini ini = new Wini(new File("conf.ini"));
-        //setting
-        Bacs.cores = ini.get("settings", "threads", int.class);
-        if(Bacs.cores == 0){
-			Bacs.cores = Runtime.getRuntime().availableProcessors()/2;}
-        
-        Bacs.dimension = ini.get("settings", "dimension", int.class);
-        
-        Bacs.scale = ini.get("settings", "scale", int.class);
-      
-        Bacs.itermax = ini.get("settings", "iterations", int.class);
-        
-        //BacUnit
-        BacUnit.actlim = ini.get("BacUnit", "actlim", int.class);
-        
-        BacUnit.relsence = ini.get("BacUnit", "relsence", int.class);
-        
-        BacUnit.gainbase = ini.get("BacUnit", "gainbase", int.class);
-        
-        BacUnit.lumus = ini.get("BacUnit", "light", boolean.class);
-    }
-    
-    static void getMoreParameters() throws IOException{//порнография...
-    	Wini ini = new Wini(new File("conf.ini"));
-    	BacUnit that = battlefield[dimension/2][dimension/2];
-    	that.stats.str = ini.get("BacUnit", "str", int.class);
-    	that.stats.mut = ini.get("BacUnit", "mut", int.class);
-    	that.stats.end = ini.get("BacUnit", "end", int.class);
-    	
-    	String beh = ini.get("BacUnit", "behaviour", String.class);
-    	
-    	beh = beh.replace("move", Integer.toString(BacUnit.actlim));
-    	beh = beh.replace("turn", Integer.toString(BacUnit.actlim+1));
-    	beh = beh.replace("eat", Integer.toString(BacUnit.actlim+2));
-    	beh = beh.replace("gain", Integer.toString(BacUnit.actlim+3));
-    	beh = beh.replace("attack", Integer.toString(BacUnit.actlim+4));
-    	beh = beh.replace("observe", Integer.toString(BacUnit.actlim+5));
-    	
-    	String[] behraw = beh.split(":");
-    	for(int i = 0; i<behraw.length; i++){that.behaviour[i] = Integer.parseInt(behraw[i]);};
-    }
+
 }
 
 class Iteration extends Thread
@@ -179,8 +136,8 @@ class Iteration extends Thread
 	
 	public void run()
 	{
-		while(Bacs.iternum < Bacs.itermax){
-			int dimension = Bacs.dimension;
+		while(Bacs.iternum < Bacs.settings.maxIterations){
+			int dimension = Bacs.settings.dimension;
 			int x, y;
 			for (int i = 0; i<dimension*dimension; i++){
 				//System.out.println(i+" "+j+" act="+battlefield[i][j].action+" comm="+battlefield[i][j].behaviour[battlefield[i][j].action % 64]+" dir="+battlefield[i][j].direction+" nrg="+battlefield[i][j].energy);

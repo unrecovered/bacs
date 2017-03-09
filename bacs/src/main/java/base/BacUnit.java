@@ -45,10 +45,10 @@ public class BacUnit implements Cloneable{
 		this.y = y;
 		
 		if(lumus){
-			int tocenterx = Math.abs(Bacs.dimension/2 - x);
-			int tocentery = Math.abs(Bacs.dimension/2 - y);
+			int tocenterx = Math.abs(Bacs.settings.dimension/2 - x);
+			int tocentery = Math.abs(Bacs.settings.dimension/2 - y);
 			double tocenter = Math.sqrt(tocenterx*tocenterx+tocentery*tocentery);
-			double diag = Math.sqrt(Bacs.dimension* Bacs.dimension+ Bacs.dimension* Bacs.dimension); //можно в статик...
+			double diag = Math.sqrt(Bacs.settings.dimension* Bacs.settings.dimension+ Bacs.settings.dimension* Bacs.settings.dimension); //можно в статик...
 			light = (diag/2-tocenter)/(diag/2);
 			
 			light = light < 0 ? 0 : light;
@@ -99,8 +99,8 @@ public class BacUnit implements Cloneable{
 	}
 	
 	void setd(int direction){
-		dx = (x+dirx[direction]+ Bacs.dimension) % Bacs.dimension;
-		dy = (y+diry[direction]+ Bacs.dimension) % Bacs.dimension;
+		dx = (x+dirx[direction]+ Bacs.settings.dimension) % Bacs.settings.dimension;
+		dy = (y+diry[direction]+ Bacs.settings.dimension) % Bacs.settings.dimension;
 	}
 	
 	String lookup(){
