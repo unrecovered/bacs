@@ -22,8 +22,9 @@ public class Bacs {
 	
 	public static void main(String[] args) throws IOException { 
 
-		settings = Settings.fromFile("conf.ini");
+//		settings = Settings.fromFile("conf.ini");
 
+        settings = Settings.fromProperties("conf.properties");
 		Canvas playField = new Canvas(settings.dimension, settings.scale);
 		initpainting();
 
