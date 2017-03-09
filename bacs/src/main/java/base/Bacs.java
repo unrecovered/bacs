@@ -1,13 +1,13 @@
 package base;
 
 import java.awt.BorderLayout;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import org.ini4j.Wini;
+import base.ui.Canvas;
+import base.ui.MainFrame;
 
 public class Bacs {
 	private static String title = "Bacs v1.12";
@@ -20,29 +20,28 @@ public class Bacs {
 	
 	public static volatile BacUnit[][] battlefield;// = new BacUnit[dimension][dimension];
 	
-	public static JFrame window;
+	public static MainFrame window;
 	
 	
 	public static void main(String[] args) throws IOException { 
 
 		settings = Settings.fromFile("conf.ini");
+
+		Canvas playfield = new Canvas(settings.dimension, settings.scale);
 		initpainting();
 
-		
-		window=new JFrame(title);
-		int baseSize = settings.dimension * settings.scale;
-		window.setSize(baseSize + 15, baseSize + 38);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	 
+
+		window = new MainFrame(title, settings.dimension, settings.scale, playfield);
+
 	/*	Менеджер определяет
 	 *  каким образом в окне расположены объекты.*/
-		window.setLayout(new BorderLayout(1,1));
-		
-		Canvas playfield=new Canvas();
-		playfield.setSize(baseSize, baseSize);
-        window.add(playfield);		
-        window.setVisible(true);
-        
+//		window.setLayout(new BorderLayout(1,1));
+//
+//		Canvas playfield=new Canvas();
+//		playfield.setSize(baseSize, baseSize);
+//        window.add(playfield);
+//        window.setVisible(true);
+//
         //w.addKeyListener(null);
         
     	initbattle();

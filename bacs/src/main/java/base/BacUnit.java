@@ -11,8 +11,8 @@ public class BacUnit implements Cloneable{
 	final static int[] dirx = {0, 1, 1, 1, 0, -1, -1, -1};
 	final static int[] diry = {-1, -1, 0, 1, 1, 1, 0, -1};
 	
-	class Statlist implements Cloneable{
-		String clr;
+	public class Statlist implements Cloneable{
+		public String clr;
 		int str;
 		int end;
 		int mut;
@@ -22,7 +22,7 @@ public class BacUnit implements Cloneable{
 	    }
 	} 
 	
-	Statlist stats = new Statlist();
+	public Statlist stats = new Statlist();
 	
 	float energy;
 	double light;
