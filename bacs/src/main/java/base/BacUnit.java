@@ -33,22 +33,23 @@ public class BacUnit implements Cloneable {
         this.clr = "000000";
     }
 
-    public void act(int x, int y) {
+    public void act(int x, int y, double light) {
         boolean done = false;
         this.x = x;
         this.y = y;
+        this.light = light;
 
-        if (lumus) {
-            int tocenterx = Math.abs(Bacs.settings.dimension / 2 - x);
-            int tocentery = Math.abs(Bacs.settings.dimension / 2 - y);
-            double tocenter = Math.sqrt(tocenterx * tocenterx + tocentery * tocentery);
-            double diag = Math.sqrt(Bacs.settings.dimension * Bacs.settings.dimension + Bacs.settings.dimension * Bacs.settings.dimension); //можно в статик...
-            light = (diag / 2 - tocenter) / (diag / 2);
-
-            light = light < 0 ? 0 : light;
-        } else {
-            light = 1;
-        }
+//        if (lumus) {
+//            int tocenterx = Math.abs(Bacs.settings.dimension / 2 - x);
+//            int tocentery = Math.abs(Bacs.settings.dimension / 2 - y);
+//            double tocenter = Math.sqrt(tocenterx * tocenterx + tocentery * tocentery);
+//            double diag = Math.sqrt(Bacs.settings.dimension * Bacs.settings.dimension + Bacs.settings.dimension * Bacs.settings.dimension); //можно в статик...
+//            light = (diag / 2 - tocenter) / (diag / 2);
+//
+//            light = light < 0 ? 0 : light;
+//        } else {
+//            light = 1;
+//        }
         //System.out.println(x+" "+y+" "+tocenter+" "+light);
 
         if (energy < end) { //энергии не хватает на размножение - действие

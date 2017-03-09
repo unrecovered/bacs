@@ -8,7 +8,9 @@ import java.util.HashMap;
  */
 public class BattleField {
 
-    private final BacUnit[][] cells;
+    private final BacUnit[] cells;
+
+    private final BacUnit[] nextGeneration;
 
     private final int dimension;
 
@@ -18,7 +20,8 @@ public class BattleField {
     
     public BattleField(int dimension, boolean useLight) {
         this.dimension = dimension;
-        cells = new BacUnit[dimension][dimension];
+        cells = new BacUnit[dimension * dimension];
+        nextGeneration = new BacUnit[dimension * dimension];
         this.useLight = useLight;
     }
 
@@ -29,11 +32,11 @@ public class BattleField {
         int centerRow = dimension / 2;
         int centerColumn = dimension / 2;
 
-        for (int i = 0; i < dimension; i++) {
+        for (int i = 0; i < dimension * dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 BacUnit bu = new BacUnit();
                 bu.clr = "000000";
-                cells[i][j] = bu;
+                cells[i] = bu;
             }
         }
 
@@ -41,14 +44,14 @@ public class BattleField {
             for (int j = 0; j < centerColumn; j ++)
                 lightTable.put(toNum(j, i), calculateLight(j, i, centerColumn, centerRow));
 
-
-        cells[centerRow][centerColumn].clr = "FF0000";
-        cells[centerRow][centerColumn].direction = 0;
-        cells[centerRow][centerColumn].str = 1;
-        cells[centerRow][centerColumn].mut = 250;
-        cells[centerRow][centerColumn].end = 100;
-        cells[centerRow][centerColumn].energy = 50;
-        cells[centerRow][centerColumn].behaviour[0] = BacUnit.actlim + 3;
+        int initial = toNum(centerColumn, centerRow);
+        cells[initial].clr = "FF0000";
+        cells[initial].direction = 0;
+        cells[initial].str = 1;
+        cells[initial].mut = 250;
+        cells[initial].end = 100;
+        cells[initial].energy = 50;
+        cells[initial].behaviour[0] = Command.GAIN.getCode();
     }
 
     private int toNum(int x, int y) {
