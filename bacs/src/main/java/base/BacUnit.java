@@ -12,6 +12,7 @@ public class BacUnit implements Cloneable {
     final static int[] diry = {-1, -1, 0, 1, 1, 1, 0, -1};
 
 
+    // Параметры клетки
     int str;
     int end;
     int mut;
@@ -19,15 +20,15 @@ public class BacUnit implements Cloneable {
 
 
     float energy;
-    double light;
-    int direction;
-    int action = 0;
+    double light; // Освещеннойсть клетки
+    int direction; // Направление перемещения или атаки
+    int action = 0; // Номер отрабатываемой команды
 
     int x, y, dx, dy;
 
     public int[] quirks = new int[10];
 
-    public int[] behaviour = new int[23];
+    int[] behaviour = new int[23]; // последовательность действий клетки
 
     BacUnit() {
         this.clr = "000000";
@@ -215,8 +216,8 @@ public class BacUnit implements Cloneable {
     boolean move() {
 
         if (lookup() == "empty") {
-            BacUnit swap = new BacUnit();
-            swap = Bacs.battlefield[dx][dy];
+//            BacUnit swap = new BacUnit();
+            BacUnit swap = Bacs.battlefield[dx][dy];
             Bacs.battlefield[dx][dy] = Bacs.battlefield[x][y];
             Bacs.battlefield[x][y] = swap;
             return true;
@@ -254,4 +255,5 @@ public class BacUnit implements Cloneable {
     public String getColorCode() {
         return clr;
     }
+
 }

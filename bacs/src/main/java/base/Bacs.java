@@ -90,12 +90,11 @@ public class Bacs {
         initial.mut = 250;
         initial.end = 100;
         initial.energy = 50;
-        initial.behaviour[0] = settings.actLim + 3;
+//        initial.behaviour[0] = settings.actLim + 3;
         String[] behraw = settings.behaviour.split(":");
         for(int i = 0; i<behraw.length; i++) {
             initial.behaviour[i] = Integer.parseInt(behraw[i]);
         }
-//		getMoreParameters();
 	}
 	
 	static void initpainting(){
