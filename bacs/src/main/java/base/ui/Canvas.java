@@ -32,7 +32,7 @@ public class Canvas extends JComponent {
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                g2d.setPaint(Color.decode("#" + Bacs.battlefield[i][j].stats.clr));
+                g2d.setPaint(Color.decode("#" + Bacs.battlefield[i][j].getColorCode()));
                 //if(Bacs.battlefield[i][j].stats.clr != "#000000"){System.out.println(i+" "+j+" "+Bacs.battlefield[i][j].stats.clr);}
                 if (scale > 3) {
                     g2d.drawRect(i * scale, j * scale, scale - 1, scale - 1);

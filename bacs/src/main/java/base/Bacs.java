@@ -1,18 +1,15 @@
 package base;
 
-import java.awt.BorderLayout;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import javax.swing.JFrame;
-
 import base.ui.Canvas;
 import base.ui.MainFrame;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Bacs {
 	private static String title = "Bacs v1.12";
 	
-	public static int iternum = 0;
+	static int iternum = 0;
 
 	static Settings settings;
 
@@ -27,23 +24,15 @@ public class Bacs {
 
 		settings = Settings.fromFile("conf.ini");
 
-		Canvas playfield = new Canvas(settings.dimension, settings.scale);
+		Canvas playField = new Canvas(settings.dimension, settings.scale);
 		initpainting();
 
 
-		window = new MainFrame(title, settings.dimension, settings.scale, playfield);
+		window = new MainFrame(title, settings.dimension, settings.scale, playField);
 
 	/*	Менеджер определяет
 	 *  каким образом в окне расположены объекты.*/
-//		window.setLayout(new BorderLayout(1,1));
-//
-//		Canvas playfield=new Canvas();
-//		playfield.setSize(baseSize, baseSize);
-//        window.add(playfield);
-//        window.setVisible(true);
-//
-        //w.addKeyListener(null);
-        
+
     	initbattle();
 
     	Iteration[] processes = new Iteration[settings.cores];
@@ -61,7 +50,7 @@ public class Bacs {
     		try {
     			Thread.sleep(16);
         		window.setTitle(title+ " Iteration " +iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
-        		playfield.repaint();
+        		playField.repaint();
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		} 		
@@ -139,7 +128,7 @@ class Iteration extends Thread
 			int dimension = Bacs.settings.dimension;
 			int x, y;
 			for (int i = 0; i<dimension*dimension; i++){
-				//System.out.println(i+" "+j+" act="+battlefield[i][j].action+" comm="+battlefield[i][j].behaviour[battlefield[i][j].action % 64]+" dir="+battlefield[i][j].direction+" nrg="+battlefield[i][j].energy);
+				//System.out.println(i+" "+j+" act="+battlefield[i][j].actionPointer+" comm="+battlefield[i][j].behaviour[battlefield[i][j].actionPointer % 64]+" dir="+battlefield[i][j].direction+" nrg="+battlefield[i][j].energy);
 				x = Bacs.getRandom(0, dimension-1);
 				y = Bacs.getRandom(0, dimension-1);
 				if((Bacs.battlefield[x][y].stats.clr != "000000")&&(Bacs.battlefield[x][y].stats.clr != "FFFFFF")){
