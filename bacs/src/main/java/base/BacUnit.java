@@ -58,26 +58,26 @@ public class BacUnit implements Cloneable {
                 for (int i = 0; (i < actlim) && (!done); i++) {
                     action = action % actlim;
 
-                    if (behaviour[action] == actlim) { //тут был красивый свитч, но в силу причин он был выпилен...
+                    if (behaviour[action] == Command.MOVE.getCode()) { //тут был красивый свитч, но в силу причин он был выпилен...
                         move();
                         done = true;
                         action++;
-                    } else if (behaviour[action] == actlim + 1) {
+                    } else if (behaviour[action] == Command.TURN_LEFT.getCode()) {
                         turn(behaviour[(action + actlim + 1) % actlim]);
                         action += 2;
-                    } else if (behaviour[action] == actlim + 2) {
+                    } else if (behaviour[action] == Command.EAT.getCode()) {
                         action++;
                         eat();
                         done = true;
-                    } else if (behaviour[action] == actlim + 3) {
+                    } else if (behaviour[action] == Command.GAIN.getCode()) {
                         action++;
                         gain();
                         done = true;
-                    } else if (behaviour[action] == actlim + 4) {
+                    } else if (behaviour[action] == Command.ATTACK.getCode()) {
                         action++;
                         attack();
                         done = true;
-                    } else if (behaviour[action] == actlim + 5) {
+                    } else if (behaviour[action] == Command.OBSERVE.getCode()) {
                         action += (observe() + actlim) % actlim;
                     } else {
                         action = behaviour[action];
