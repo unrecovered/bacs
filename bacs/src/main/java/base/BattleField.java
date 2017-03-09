@@ -32,7 +32,7 @@ public class BattleField {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 BacUnit bu = new BacUnit();
-                bu.stats.clr = "000000";
+                bu.clr = "000000";
                 cells[i][j] = bu;
             }
         }
@@ -42,11 +42,11 @@ public class BattleField {
                 lightTable.put(toNum(j, i), calculateLight(j, i, centerColumn, centerRow));
 
 
-        cells[centerRow][centerColumn].stats.clr = "FF0000";
+        cells[centerRow][centerColumn].clr = "FF0000";
         cells[centerRow][centerColumn].direction = 0;
-        cells[centerRow][centerColumn].stats.str = 1;
-        cells[centerRow][centerColumn].stats.mut = 250;
-        cells[centerRow][centerColumn].stats.end = 100;
+        cells[centerRow][centerColumn].str = 1;
+        cells[centerRow][centerColumn].mut = 250;
+        cells[centerRow][centerColumn].end = 100;
         cells[centerRow][centerColumn].energy = 50;
         cells[centerRow][centerColumn].behaviour[0] = BacUnit.actlim + 3;
     }

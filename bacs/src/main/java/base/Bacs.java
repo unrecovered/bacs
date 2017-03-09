@@ -17,12 +17,11 @@ public class Bacs {
 	
 	public static volatile BacUnit[][] battlefield;// = new BacUnit[dimension][dimension];
 	
-	public static MainFrame window;
+	private static MainFrame window;
 	
 	
 	public static void main(String[] args) throws IOException { 
 
-//		settings = Settings.fromFile("conf.ini");
 
         settings = Settings.fromProperties("conf.properties");
 		Canvas playField = new Canvas(settings.dimension, settings.scale);
@@ -30,9 +29,6 @@ public class Bacs {
 
 
 		window = new MainFrame(title, settings.dimension, settings.scale, playField);
-
-	/*	Менеджер определяет
-	 *  каким образом в окне расположены объекты.*/
 
     	initbattle();
 
@@ -72,7 +68,7 @@ public class Bacs {
             StringBuilder text = new StringBuilder();
             for(int i=0; i<30; i++){
             	BacUnit that = Bacs.battlefield[Bacs.getRandom(0, settings.dimension - 1)][Bacs.getRandom(0, settings.dimension - 1)];
-            	text.append("str=" + that.stats.str + " end=" + that.stats.end + " clr=" +that.stats.clr + " mut=" + that.stats.mut + " behaviour={ ");
+            	text.append("str=" + that.str + " end=" + that.end + " clr=" +that.clr + " mut=" + that.mut + " behaviour={ ");
             	for(int j = 0; j< BacUnit.actlim; j++) {
             	    text.append(that.behaviour[j] + " ");
             	}
@@ -89,11 +85,11 @@ public class Bacs {
 	
 	static void initbattle() throws IOException {
 	    BacUnit initial = battlefield[settings.dimension / 2][settings.dimension / 2];
-		initial.stats.clr = "FF0000";
+		initial.clr = "FF0000";
         initial.direction = 0;
-        initial.stats.str = 1;
-        initial.stats.mut = 250;
-        initial.stats.end = 100;
+        initial.str = 1;
+        initial.mut = 250;
+        initial.end = 100;
         initial.energy = 50;
         initial.behaviour[0] = settings.actLim + 3;
         String[] behraw = settings.behaviour.split(":");
@@ -108,7 +104,7 @@ public class Bacs {
 		for(int i = 0; i< Bacs.settings.dimension; i++){
 			for(int j = 0; j< Bacs.settings.dimension; j++){
 				battlefield[i][j] = new BacUnit();
-				battlefield[i][j].stats.clr = "000000";
+				battlefield[i][j].clr = "000000";
 			}
 		}
 	}
@@ -132,7 +128,7 @@ class Iteration extends Thread
 				//System.out.println(i+" "+j+" act="+battlefield[i][j].actionPointer+" comm="+battlefield[i][j].behaviour[battlefield[i][j].actionPointer % 64]+" dir="+battlefield[i][j].direction+" nrg="+battlefield[i][j].energy);
 				x = Bacs.getRandom(0, dimension-1);
 				y = Bacs.getRandom(0, dimension-1);
-				if((Bacs.battlefield[x][y].stats.clr != "000000")&&(Bacs.battlefield[x][y].stats.clr != "FFFFFF")){
+				if((Bacs.battlefield[x][y].clr != "000000")&&(Bacs.battlefield[x][y].clr != "FFFFFF")){
 					Bacs.battlefield[x][y].act(x,y);
 				}
 			}

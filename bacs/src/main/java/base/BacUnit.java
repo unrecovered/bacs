@@ -11,23 +11,12 @@ public class BacUnit implements Cloneable {
     final static int[] dirx = {0, 1, 1, 1, 0, -1, -1, -1};
     final static int[] diry = {-1, -1, 0, 1, 1, 1, 0, -1};
 
-    public class Statlist implements Cloneable {
-        public String clr;
-        int str;
-        int end;
-        int mut;
-
-        public Statlist clone() throws CloneNotSupportedException {
-            return (Statlist) super.clone();
-        }
-    }
 
     int str;
     int end;
     int mut;
-    public String clr;
+    String clr;
 
-    public Statlist stats = new Statlist();
 
     float energy;
     double light;
@@ -41,7 +30,6 @@ public class BacUnit implements Cloneable {
     public int[] behaviour = new int[23];
 
     BacUnit() {
-        this.stats.clr = "000000";
         this.clr = "000000";
     }
 
@@ -63,9 +51,9 @@ public class BacUnit implements Cloneable {
         }
         //System.out.println(x+" "+y+" "+tocenter+" "+light);
 
-        if (energy < stats.end) { //энергии не хватает на размножение - действие
+        if (energy < end) { //энергии не хватает на размножение - действие
             if (energy > 0) { //энергия меньше нуля - смерть
-                energy -= 1 + (float) Math.abs(stats.str) / 10; //энергопотребление
+                energy -= 1 + (float) Math.abs(str) / 10; //энергопотребление
                 for (int i = 0; (i < actlim) && (!done); i++) {
                     action = action % actlim;
 
@@ -112,12 +100,12 @@ public class BacUnit implements Cloneable {
     String lookup() {
         setd(this.direction);
         BacUnit that = Bacs.battlefield[dx][dy];
-        if (that.stats.clr == "FFFFFF") {
+        if (that.clr == "FFFFFF") {
             return "corpse";
-        } else if (that.stats.clr == "000000") {
+        } else if (that.clr == "000000") {
             return "empty";
         } else {
-            if (Math.abs(this.stats.clr.compareTo(that.stats.clr)) < relsence) {
+            if (Math.abs(this.clr.compareTo(that.clr)) < relsence) {
                 return "relative";
             } else {
                 return "other";
@@ -156,7 +144,7 @@ public class BacUnit implements Cloneable {
 
     boolean attack() {
         if (lookup() == "other") {
-            if (Bacs.getRandom(0, this.stats.str + Bacs.battlefield[dx][dy].stats.str) <= this.stats.str) {
+            if (Bacs.getRandom(0, this.str + Bacs.battlefield[dx][dy].str) <= this.str) {
                 Bacs.battlefield[dx][dy].die(true);
             }
             return true;
@@ -192,24 +180,24 @@ public class BacUnit implements Cloneable {
                 Bacs.battlefield[dx][dy].direction = Bacs.getRandom(0, 7);
                 BacUnit that = Bacs.battlefield[dx][dy];
 
-                if (Bacs.getRandom(0, 1000) < this.stats.mut) {// пока что единый шанс мутации для всего
+                if (Bacs.getRandom(0, 1000) < this.mut) {// пока что единый шанс мутации для всего
                     //мутация статов
-                    if (that.stats.str > 1) {
-                        that.stats.str += Bacs.getRandom(-1, 1);
+                    if (that.str > 1) {
+                        that.str += Bacs.getRandom(-1, 1);
                     } else {
-                        that.stats.str += Bacs.getRandom(0, 1);
+                        that.str += Bacs.getRandom(0, 1);
                     }
-                    that.stats.end += Bacs.getRandom(-1, 1);
-                    //int intcolor = (int) Integer.parseInt(that.stats.clr, 16) + Bacs.getRandom(0, 3);
-                    //that.stats.clr = Integer.toHexString(intcolor);
-                    that.stats.clr = Integer.toHexString(Bacs.getRandom(1, 16777214));
-                    that.stats.mut += Bacs.getRandom(-1, 1);
+                    that.end += Bacs.getRandom(-1, 1);
+                    //int intcolor = (int) Integer.parseInt(that.clr, 16) + Bacs.getRandom(0, 3);
+                    //that.clr = Integer.toHexString(intcolor);
+                    that.clr = Integer.toHexString(Bacs.getRandom(1, 16777214));
+                    that.mut += Bacs.getRandom(-1, 1);
 
                     //мутация поведения
                     int mutnum = Bacs.getRandom(0, actlim - 1);
                     that.behaviour[mutnum] = Bacs.getRandom(0, actlim + comnum - 1);
                     //System.out.println(that.x+" "+that.y+" number="+mutnum+" command="+that.behaviour[mutnum]);
-                    //System.out.println("str="+stats.str+" end="+stats.end+" clr="+stats.clr+" mut="+stats.mut+" Iteration="+Bacs.iternum);
+                    //System.out.println("str="+str+" end="+end+" clr="+clr+" mut="+mut+" Iteration="+Bacs.iternum);
                     //for(int i=0; i<10; i++){System.out.print(that.behaviour[i]+" ");}
                     //System.out.println();
                 }
@@ -246,23 +234,23 @@ public class BacUnit implements Cloneable {
 
     void die(boolean corpse) {
         if (corpse) {
-            this.stats.clr = "FFFFFF";
+            this.clr = "FFFFFF";
         } else {
             Bacs.battlefield[x][y] = new BacUnit();
-            //Bacs.battlefield[x][y].stats.clr = "000000";
+            //Bacs.battlefield[x][y].clr = "000000";
         }
         //System.out.println(x+" "+y+" died");
     }
 
     public BacUnit clone() throws CloneNotSupportedException {
         BacUnit unit = (BacUnit) super.clone();
-        unit.stats = (Statlist) stats.clone();
+//        unit.stats = (Statlist) clone();
         unit.behaviour = new int[actlim];
         unit.behaviour = Arrays.copyOf(behaviour, actlim);
         return unit;
     }
 
     public String getColorCode() {
-        return stats.clr;
+        return clr;
     }
 }
