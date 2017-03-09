@@ -22,6 +22,11 @@ public class BacUnit implements Cloneable {
         }
     }
 
+    int str;
+    int end;
+    int mut;
+    public String clr;
+
     public Statlist stats = new Statlist();
 
     float energy;
@@ -37,6 +42,7 @@ public class BacUnit implements Cloneable {
 
     BacUnit() {
         this.stats.clr = "000000";
+        this.clr = "000000";
     }
 
     public void act(int x, int y) {

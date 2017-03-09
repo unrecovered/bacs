@@ -7,7 +7,8 @@ public enum Command {
     NOOP(0, "No operations"),
     GAIN(23, "Gain the sunlight"),
     MOVE(20, "Move to another cell"),
-    TURN(21, "Turn direction"),
+    TURN_LEFT(21, "Turn left"),
+    TURN_RIGHT(26, "Turn right"),
     EAT(22, "FOOD !!!"),
     ATTACK(24, "Kill'em'All"),
     OBSERVE(25, "Look Out");
