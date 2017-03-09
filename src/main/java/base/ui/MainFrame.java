@@ -12,7 +12,7 @@ public class MainFrame extends JFrame {
         super(title);
         int baseSize = dimension * scale;
         setSize(baseSize + 15, baseSize + 38);
-        setSize(dimension * scale + 15, dimension * scale +38);
+        setSize(dimension * scale + 15, dimension * scale + 38);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         add(playField);

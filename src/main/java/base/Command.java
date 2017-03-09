@@ -35,7 +35,7 @@ public enum Command {
     }
 
     public Command fromCode(int code) {
-        for (Command c: Command.values())
+        for (Command c : Command.values())
             if (c.code == code)
                 return c;
         return null;

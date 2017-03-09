@@ -3,3 +3,5 @@
 .*
 .class
 *.jar
+out/
+build/
