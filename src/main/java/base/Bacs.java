@@ -25,7 +25,7 @@ public class Bacs {
 		Canvas playField = new Canvas(settings.dimension, settings.scale);
 		initpainting();
 
-		window = new MainFrame(title, settings.dimension, settings.scale, playField);
+		window = new MainFrame(title, settings, playField);
 
     	initbattle();
 

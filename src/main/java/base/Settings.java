@@ -8,18 +8,18 @@ import java.util.Properties;
  * Created by valera on 08.03.17.
  */
 public class Settings {
-    int cores;
-    int dimension;
-    int scale;
-    int maxIterations;
-    int actLim;
-    int relSense;
-    int gainBase;
-    boolean lumus;
+    public int cores;
+    public int dimension;
+    public int scale;
+    public int maxIterations;
+    public int actLim;
+    public int relSense;
+    public int gainBase;
+    public boolean lumus;
 
-    int strength;
-    int mutagen;
-    int end;
+    public int strength;
+    public int mutagen;
+    public int end;
 
     String behaviour;
 
@@ -35,7 +35,7 @@ public class Settings {
         settings.dimension = Integer.valueOf(props.getProperty("settings.dimension", "150"));
         settings.scale = Integer.valueOf(props.getProperty("settings.scale", "1"));
         settings.maxIterations = Integer.valueOf(props.getProperty("settings.iterations", "10000"));
-        settings.lumus = Boolean.getBoolean(props.getProperty("settings.light", "true"));
+        settings.lumus = Boolean.valueOf(props.getProperty("settings.light", "true"));
 
         settings.actLim = Integer.valueOf(props.getProperty("backunit.actlim", "20"));
         settings.relSense = Integer.valueOf(props.getProperty("backunit.relsence", "5"));

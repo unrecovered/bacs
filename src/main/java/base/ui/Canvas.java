@@ -4,6 +4,7 @@ import base.Bacs;
 
 import java.awt.*;
 
+import javax.naming.spi.DirectoryManager;
 import javax.swing.JComponent;
 
 public class Canvas extends JComponent {
@@ -15,8 +16,14 @@ public class Canvas extends JComponent {
     public Canvas(int dimension, int scale) {
         this.dimension = dimension;
         this.scale = scale;
-        setSize(dimension, dimension);
+        Dimension d = new Dimension(dimension * scale, dimension * scale);
+        setSize(d);
+        setPreferredSize(d);
+        setMinimumSize(d);
+        setMaximumSize(d);
     }
+
+
 
     /**
      *
