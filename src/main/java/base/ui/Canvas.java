@@ -1,6 +1,7 @@
 package base.ui;
 
 import base.Bacs;
+import base.BattleField;
 
 import java.awt.*;
 
@@ -13,9 +14,12 @@ public class Canvas extends JComponent {
 
     private final int scale;
 
-    public Canvas(int dimension, int scale) {
+    private final BattleField battleField;
+
+    public Canvas(int dimension, int scale, BattleField battleField) {
         this.dimension = dimension;
         this.scale = scale;
+        this.battleField = battleField;
         Dimension d = new Dimension(dimension * scale, dimension * scale);
         setSize(d);
         setPreferredSize(d);
@@ -39,7 +43,7 @@ public class Canvas extends JComponent {
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                g2d.setPaint(Color.decode("#" + Bacs.battlefield[i][j].getColorCode()));
+                g2d.setPaint(Color.decode("#" + battleField.getCell(i, j).getColorCode()));
                 //if(Bacs.battlefield[i][j].stats.clr != "#000000"){System.out.println(i+" "+j+" "+Bacs.battlefield[i][j].stats.clr);}
                 if (scale > 3) {
                     g2d.drawRect(i * scale, j * scale, scale - 1, scale - 1);
