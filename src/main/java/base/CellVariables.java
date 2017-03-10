@@ -7,12 +7,8 @@ package base;
 public class CellVariables {
     float energy; // Энергия клетки. Когда падает до нуля, клетка умирает.
     CellStatus status;
-    int strength;
-    int end;
-    int mut;
     String color;
     int direction;
-    int actionNumber; // Номер отрабатываемой в данный момент команды
 
     public void setEnergy(float energy) {
         this.energy = energy;

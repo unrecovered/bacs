@@ -2,6 +2,8 @@ package base;
 
 import java.util.Arrays;
 
+import static base.utils.Random.*;
+
 public class BacUnit implements Cloneable {
     static int actlim = 20; //maximum number of actions
     static int comnum = 6; //number of commands available
@@ -30,7 +32,10 @@ public class BacUnit implements Cloneable {
 
     int[] behaviour = new int[23]; // последовательность действий клетки
 
+    private final Settings settings;
+
     BacUnit() {
+        this.settings = Bacs.settings; //todo Remove that shit!
         this.clr = "000000";
     }
 
@@ -95,8 +100,8 @@ public class BacUnit implements Cloneable {
     }
 
     void setd(int direction) {
-        dx = (x + dirx[direction] + Bacs.settings.dimension) % Bacs.settings.dimension;
-        dy = (y + diry[direction] + Bacs.settings.dimension) % Bacs.settings.dimension;
+        dx = (x + dirx[direction] + settings.dimension) % settings.dimension;
+        dy = (y + diry[direction] + settings.dimension) % settings.dimension;
     }
 
     String lookup() {
@@ -146,7 +151,7 @@ public class BacUnit implements Cloneable {
 
     boolean attack() {
         if (lookup() == "other") {
-            if (Bacs.getRandom(0, this.str + Bacs.battlefield[dx][dy].str) <= this.str) {
+            if (getRandom(0, this.str + Bacs.battlefield[dx][dy].str) <= this.str) {
                 Bacs.battlefield[dx][dy].die(true);
             }
             return true;
@@ -169,7 +174,7 @@ public class BacUnit implements Cloneable {
         this.direction = direction;
 
         if (point > 0) {
-            int spacenum = Bacs.getRandom(0, point - 1);
+            int spacenum = getRandom(0, point - 1);
             spacenum = freespace[spacenum];
 
             setd(spacenum);
@@ -179,25 +184,25 @@ public class BacUnit implements Cloneable {
                 BacUnit clone = this.clone();
                 Bacs.battlefield[dx][dy] = clone;
                 Bacs.battlefield[dx][dy].action = 0;
-                Bacs.battlefield[dx][dy].direction = Bacs.getRandom(0, 7);
+                Bacs.battlefield[dx][dy].direction = getRandom(0, 7);
                 BacUnit that = Bacs.battlefield[dx][dy];
 
-                if (Bacs.getRandom(0, 1000) < this.mut) {// пока что единый шанс мутации для всего
+                if (getRandom(0, 1000) < this.mut) {// пока что единый шанс мутации для всего
                     //мутация статов
                     if (that.str > 1) {
-                        that.str += Bacs.getRandom(-1, 1);
+                        that.str += getRandom(-1, 1);
                     } else {
-                        that.str += Bacs.getRandom(0, 1);
+                        that.str += getRandom(0, 1);
                     }
-                    that.end += Bacs.getRandom(-1, 1);
+                    that.end += getRandom(-1, 1);
                     //int intcolor = (int) Integer.parseInt(that.clr, 16) + Bacs.getRandom(0, 3);
                     //that.clr = Integer.toHexString(intcolor);
-                    that.clr = Integer.toHexString(Bacs.getRandom(1, 16777214));
-                    that.mut += Bacs.getRandom(-1, 1);
+                    that.clr = Integer.toHexString(getRandom(1, 16777214));
+                    that.mut += getRandom(-1, 1);
 
                     //мутация поведения
-                    int mutnum = Bacs.getRandom(0, actlim - 1);
-                    that.behaviour[mutnum] = Bacs.getRandom(0, actlim + comnum - 1);
+                    int mutnum = getRandom(0, actlim - 1);
+                    that.behaviour[mutnum] = getRandom(0, actlim + comnum - 1);
                     //System.out.println(that.x+" "+that.y+" number="+mutnum+" command="+that.behaviour[mutnum]);
                     //System.out.println("str="+str+" end="+end+" clr="+clr+" mut="+mut+" Iteration="+Bacs.iternum);
                     //for(int i=0; i<10; i++){System.out.print(that.behaviour[i]+" ");}
