@@ -10,7 +10,7 @@ import java.awt.*;
  * Created by ilychevva
  */
 public class MainSettings extends JPanel {
-    Settings settings;
+    private Settings settings;
 
     private final JTextField cores = new JTextField();
 
@@ -35,7 +35,7 @@ public class MainSettings extends JPanel {
     private final JTextField end = new JTextField();
 
 
-    public MainSettings() {
+    MainSettings() {
         super();
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));

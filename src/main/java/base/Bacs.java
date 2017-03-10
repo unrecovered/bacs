@@ -66,7 +66,12 @@ public class Bacs {
             	BacUnit that = Bacs.battlefield[Bacs.getRandom(0, settings.dimension - 1)][Bacs.getRandom(0, settings.dimension - 1)];
             	text.append("str=" + that.str + " end=" + that.end + " clr=" +that.clr + " mut=" + that.mut + " behaviour={ ");
             	for(int j = 0; j< BacUnit.actlim; j++) {
-            	    text.append(that.behaviour[j] + " ");
+            	    Command cmd = Command.fromCode(that.behaviour[j]);
+            	    if (cmd != null) {
+                        text.append(cmd.getName() + " ");
+                    } else {
+            	        text.append(that.behaviour[j] + " ");
+                    }
             	}
             	text.append("}"+'\r'+'\n');
             }
