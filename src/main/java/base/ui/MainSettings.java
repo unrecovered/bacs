@@ -55,7 +55,7 @@ public class MainSettings extends JPanel {
         add(new JLabel("Длина цепочки действий:"), getLabelGBC(0, 7));
         add(actLim, getFieldGBC(1, 7));
         add(new JLabel("Базовая сила:"), getLabelGBC(0, 8));
-        add(strength, getFieldGBC(1, 7));
+        add(strength, getFieldGBC(1, 8));
         add(new JLabel("Мутагенность:"), getLabelGBC(0, 9));
         add(mutagen, getFieldGBC(1, 9));
         add(new JLabel("Порог энергии для размножения:"), getLabelGBC(0, 10));

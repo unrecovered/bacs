@@ -7,7 +7,7 @@ package base;
 public class CellUnit {
     private CellStatus status;
 
-    private String color;
+    private Genom genom;
 
     private final CellVariables currentParameters;
 
@@ -17,13 +17,9 @@ public class CellUnit {
 
     private boolean active;
 
-    private int breedTrigger;
-
     private double light;
 
-    private int strength;
-
-    private int[] actions;
+    private int gainBase;
 
     public CellUnit() {
         currentParameters = new CellVariables();
@@ -43,7 +39,7 @@ public class CellUnit {
     public String getColor() {
         switch (status) {
             case ACTIVE:
-                return color;
+                return genom.getColor();
             case CORPSE:
                 return "FFFFFF";
             case EMPTY:
@@ -54,10 +50,10 @@ public class CellUnit {
 
     public void move() {
         if (active) {
-            if (currentParameters.energy > breedTrigger) {// Время размножаться
+            if (currentParameters.energy > genom.getBreedTrigger()) {// Время размножаться
                 assert 1 == 1;
             } else { //Пытаемся действовать
-                nextIteration.energy = currentParameters.energy - 1 * (float) strength / 10;
+                nextIteration.energy = currentParameters.energy - 1 * (float) genom.getStrength() / 10;
                 assert 1 == 1;
                 changed = true;
             }
@@ -76,5 +72,8 @@ public class CellUnit {
         }
     }
 
+    public void gain() {
+        nextIteration.energy += light * gainBase;
+    }
 
 }
