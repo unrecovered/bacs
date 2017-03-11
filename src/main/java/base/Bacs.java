@@ -28,7 +28,7 @@ public class Bacs {
         Canvas playField = new Canvas(settings.dimension, settings.scale, battleField);
 
         window = new MainFrame(title, settings, playField);
-        battleField.init(50, "00FF00", 0, settings.strength, settings.mutagen, settings.end);
+        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
 //        initBattle();
 
 //        Iteration processes = new Iteration[settings.cores];

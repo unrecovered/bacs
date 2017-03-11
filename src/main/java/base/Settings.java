@@ -42,7 +42,7 @@ public class Settings {
         settings.gainBase = Integer.valueOf(props.getProperty("backunit.gainbase", "5"));
 
         settings.strength = Integer.valueOf(props.getProperty("stats.str", "1"));
-        settings.mutagen = Integer.valueOf(props.getProperty("stats.mutstats", "50"));
+        settings.mutagen = Integer.valueOf(props.getProperty("stats.mutstat", "50"));
         settings.end = Integer.valueOf(props.getProperty("stats.end", "100"));
 
         String beh = props.getProperty("behaviour", "gain:");
