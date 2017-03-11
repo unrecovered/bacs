@@ -1,13 +1,12 @@
 package base;
 
-import base.ui.Canvas;
-import base.utils.Random;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static base.utils.Random.getRandomColorCode;
 import static base.utils.Random.getRandom;
+import static base.utils.Random.getRandomPercent;
 
 /**
  * Основной класс движка
@@ -23,16 +22,19 @@ public class Engine {
     }
 
     public void process(int x, int y) {
-//        System.out.println("Process " + x + " " + y);
         BacUnit target = battleField.getCell(x, y);
+        target.ticks++;
+        if (target.ticks > 10000) {
+            corpse(target);
+            return;
+        }
+
         if (target.energy >= target.end) {
-//            System.out.println("breed");
             breed(x, y, target);
             return;
         }
-        target.energy -= 1 + (float) target.str / 10;
+
         if (target.energy <= 0) {
-//            System.out.println("dying");
             die(target);
             return;
         }
@@ -41,13 +43,13 @@ public class Engine {
         boolean nextMove = true;
         int counter = 0;
         while (nextMove) {
-//        for (int i = 0; i < target.actlim && !done; i++)
-//        int commandCode = 0;
-//        while(commandCode == 0)
+            nextMove = counter < target.actlim;
+            target.energy -= 1 + (float) target.str / 10;
+            if (target.energy <= 0) {
+                nextMove = false;
+            }
             counter++;
-            nextMove = counter <= target.actlim;
             int commandCode = target.getMyAction();
-//        System.out.println("Command " + commandCode);
             switch (commandCode) {
                 case 20:
                     move(x, y, target);
@@ -94,7 +96,12 @@ public class Engine {
         BattleField.Coords dir = BattleField.lookup[attacker.direction];
         BacUnit defense = battleField.getCell(x + dir.x, y + dir.y);
         if (attacker.clr.compareTo(defense.clr) >= attacker.relsense)
-            corpse(getRandom(0, attacker.str + defense.str) <= attacker.str ? defense : attacker);
+            if (getRandom(0, attacker.str + defense.str) <= attacker.str) {
+                corpse(defense);
+            } else {
+                if (getRandomPercent() > 50)
+                    corpse(attacker);
+            }
     }
 
     private void eat(int x, int y, BacUnit devourer) {
@@ -133,6 +140,7 @@ public class Engine {
 //        newCell.clr = parent.clr;
         newCell.direction = getRandom(0, 7);
         newCell.action = 0;
+        newCell.ticks = 0;
 //        newCell.behaviour = Arrays.copyOf(parent.behaviour, 0);
         if (getRandom(0, 1000) < newCell.mut)
             mutate(newCell);
@@ -154,7 +162,7 @@ public class Engine {
         cell.str += cell.str > 1 ? getRandom(-1, 1) : getRandom(0, 1);
         cell.end += getRandom(-1, 1);
 
-        cell.clr = Integer.toHexString(getRandom(1, 16777214));
+        cell.clr = getRandomColorCode();
         cell.mut += getRandom(-1, 1);
 
         //мутация поведения
