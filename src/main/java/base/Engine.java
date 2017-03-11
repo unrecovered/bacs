@@ -23,11 +23,11 @@ public class Engine {
 
     public void process(int x, int y) {
         BacUnit target = battleField.getCell(x, y);
-        target.ticks++;
-        if (target.ticks > 10000) {
-            corpse(target);
-            return;
-        }
+//        target.ticks++;
+//        if (target.ticks > 10000) {
+//            corpse(target);
+//            return;
+//        }
 
         if (target.energy >= target.end) {
             breed(x, y, target);

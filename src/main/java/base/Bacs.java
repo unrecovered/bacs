@@ -3,8 +3,10 @@ package base;
 import base.ui.Canvas;
 import base.ui.MainFrame;
 
+import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static base.utils.Random.*;
 
@@ -22,45 +24,30 @@ public class Bacs {
     private static MainFrame window;
 
 
+
     public static void main(String[] args) throws IOException {
         settings = Settings.fromProperties("conf.properties");
         BattleField battleField = new BattleField(settings.dimension, settings.lumus);
+        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
         Canvas playField = new Canvas(settings.dimension, settings.scale, battleField);
 
-        window = new MainFrame(title, settings, playField);
-        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
-//        initBattle();
-
-//        Iteration processes = new Iteration[settings.cores];
-
-//        for (int i = 0; i < settings.cores; i++) {
-        Iteration processes = new Iteration(settings, battleField);    //Создание потока
-//        }
-
-//        for (int i = 0; i < settings.cores; i++) {
-        processes.isDaemon();
-        processes.start();
-//        }
+//        MainFrame window;
+        SwingUtilities.invokeLater(() -> window = new MainFrame(title, settings, playField));
+//        window = new MainFrame(title, settings, playField);
+//
+        MoveIterator iterator = new MoveIterator(battleField, settings.dimension);    //Создание потока
 
         while (iternum < settings.maxIterations) {
-            try {
-                Thread.sleep(16);
-                window.setTitle(title + " Iteration " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
-                playField.repaint();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
+            iterator.next();
+            iternum++;
+            SwingUtilities.invokeLater(() -> playField.repaint());
         }
 
-        window.setTitle(title + " Iteration " + iternum + " out of " + settings.maxIterations + "(100% done)");
+        window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(100% done)");
 
         float passed = (float) (System.nanoTime() - Bacs.start) / 1000000000;
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         try (FileWriter writer = new FileWriter("endgame.txt", false)) {
             StringBuilder text = new StringBuilder();
