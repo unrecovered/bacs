@@ -41,23 +41,12 @@ public class BacUnit implements Cloneable {
     }
 
     public int getMyAction() {
-        action = action % actlim;
-        while (behaviour[action] == 0) {
-            action++;
-            action = action % actlim;
-        }
+        action %= actlim;
         int actionCode = behaviour[action];
         action++;
         return actionCode;
     }
 
-    public int getNextAction() {
-        action++;
-        action %= actlim;
-        int code = behaviour[action];
-        action++;
-        return code;
-    }
 //    public void act(int x, int y, double light) {
 //        boolean done = false;
 //        this.x = x;

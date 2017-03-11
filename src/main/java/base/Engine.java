@@ -38,30 +38,43 @@ public class Engine {
         }
 
         //Выполняем другие действия
-        int commandCode = 0;
+        boolean nextMove = true;
+        int counter = 0;
+        while (nextMove) {
+//        for (int i = 0; i < target.actlim && !done; i++)
+//        int commandCode = 0;
 //        while(commandCode == 0)
-        commandCode = target.getMyAction();
+            counter++;
+            nextMove = counter <= target.actlim;
+            int commandCode = target.getMyAction();
 //        System.out.println("Command " + commandCode);
-        switch (commandCode) {
-            case 20:
-                move(x, y, target);
-                break;
-            case 21:
-                target.turn(target.getNextAction());
-                break;
-            case 22:
-                eat(x, y, target);
-                break;
-            case 23:
-                target.gain();
-                break;
-            case 24:
-                attack(x, y, target);
-                break;
-            case 25:
-                observe(x, y, target);
-            default:
-                break;
+            switch (commandCode) {
+                case 20:
+                    move(x, y, target);
+                    nextMove = false;
+                    break;
+                case 21:
+                    target.turn(target.getMyAction());
+                    break;
+                case 22:
+                    eat(x, y, target);
+                    nextMove = false;
+                    break;
+                case 23:
+                    target.gain();
+                    nextMove = false;
+                    break;
+                case 24:
+                    attack(x, y, target);
+                    nextMove = false;
+                    break;
+                case 25:
+                    observe(x, y, target);
+                    break;
+                default:
+                    target.action = commandCode;
+                    break;
+            }
         }
     }
 
@@ -146,7 +159,7 @@ public class Engine {
 
         //мутация поведения
         int mutnum = getRandom(0, cell.actlim - 1);
-        cell.behaviour[mutnum] = getRandom(20, 25);
+        cell.behaviour[mutnum] = getRandom(0, 26);
     }
 
     private void die(BacUnit target) {
