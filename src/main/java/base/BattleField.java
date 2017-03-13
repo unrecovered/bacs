@@ -48,7 +48,7 @@ public class BattleField {
                     bu.light = 1;
                 }
                 bu.behaviour = new int[23];
-                cells[i][j] = bu;
+                bu.changed = true;
                 cells[i][j] = bu;
             }
         }
@@ -66,6 +66,7 @@ public class BattleField {
         initial.end = end;
         initial.energy = energy;
         initial.behaviour[0] = Command.GAIN.getCode();
+        initial.changed = true;
     }
 
     private int toNum(int x, int y) {
@@ -87,6 +88,10 @@ public class BattleField {
 //    public double getLight(int x, int y) {
 //        return lightTable.get(toNum(x - dimension / 2, y - dimension / 2));
 //    }
+
+    public int getDimension() {
+        return dimension;
+    }
 
     /**
      * Расчет коэффициента освещенности клетки поля.

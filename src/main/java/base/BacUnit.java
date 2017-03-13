@@ -6,6 +6,7 @@ public class BacUnit {
     static int relsense = 5; //how much relative can differ
     static int gainbase = 5; //energy gained with gain ability
 
+    public boolean changed;
     // Параметры клетки
     int str;
     int end;
@@ -92,9 +93,8 @@ public class BacUnit {
 //        }
 //    }
 
-    boolean gain() {
+    void gain() {
         energy += gainbase * light;
-        return true;
     }
 
     void turn(int dir) {

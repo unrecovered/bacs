@@ -4,6 +4,7 @@ import base.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  *  Панель настроек начальной конфигурации.

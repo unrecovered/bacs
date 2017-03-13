@@ -23,11 +23,6 @@ public class Engine {
 
     public void process(int x, int y) {
         BacUnit target = battleField.getCell(x, y);
-//        target.ticks++;
-//        if (target.ticks > 10000) {
-//            corpse(target);
-//            return;
-//        }
 
         if (target.energy >= target.end) {
             breed(x, y, target);
@@ -41,34 +36,35 @@ public class Engine {
 
         //Выполняем другие действия
         boolean nextMove = true;
-        int counter = 0;
-        while (nextMove) {
-            nextMove = counter < target.actlim;
-            target.energy -= 1 + (float) target.str / 10;
+//        int counter = 0;
+//        while (nextMove) {
+//            nextMove = counter < target.actlim;
+
+        target.energy -= 1 + (float) target.str / 10;
             if (target.energy <= 0) {
-                nextMove = false;
+                return;
             }
-            counter++;
+//            counter++;
             int commandCode = target.getMyAction();
             switch (commandCode) {
                 case 20:
                     move(x, y, target);
-                    nextMove = false;
+//                    nextMove = false;
                     break;
                 case 21:
                     target.turn(target.getMyAction());
                     break;
                 case 22:
                     eat(x, y, target);
-                    nextMove = false;
+//                    nextMove = false;
                     break;
                 case 23:
                     target.gain();
-                    nextMove = false;
+//                    nextMove = false;
                     break;
                 case 24:
                     attack(x, y, target);
-                    nextMove = false;
+//                    nextMove = false;
                     break;
                 case 25:
                     observe(x, y, target);
@@ -77,7 +73,7 @@ public class Engine {
                     target.action = commandCode;
                     break;
             }
-        }
+//        }
     }
 
     void observe(int x, int y, BacUnit observer) {
@@ -98,9 +94,6 @@ public class Engine {
         if (attacker.clr.compareTo(defense.clr) >= attacker.relsense)
             if (getRandom(0, attacker.str + defense.str) <= attacker.str) {
                 corpse(defense);
-            } else {
-                if (getRandomPercent() > 50)
-                    corpse(attacker);
             }
     }
 
@@ -118,6 +111,7 @@ public class Engine {
         BacUnit dest = battleField.getCell(x + dir.x, y + dir.y);
         if (dest.clr.equals("000000")) {
             copy(source, dest);
+            dest.changed = true;
             die(source);
         }
     }
@@ -141,6 +135,7 @@ public class Engine {
         newCell.direction = getRandom(0, 7);
         newCell.action = 0;
         newCell.ticks = 0;
+        newCell.changed = true;
 //        newCell.behaviour = Arrays.copyOf(parent.behaviour, 0);
         if (getRandom(0, 1000) < newCell.mut)
             mutate(newCell);
@@ -167,14 +162,16 @@ public class Engine {
 
         //мутация поведения
         int mutnum = getRandom(0, cell.actlim - 1);
-        cell.behaviour[mutnum] = getRandom(0, 26);
+        cell.behaviour[mutnum] = getRandom(20, 26);
     }
 
     private void die(BacUnit target) {
         target.clr = "000000";
+        target.changed = true;
     }
 
     private void corpse(BacUnit target) {
         target.clr = "FFFFFF";
+        target.changed = true;
     }
 }

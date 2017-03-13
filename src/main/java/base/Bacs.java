@@ -27,49 +27,50 @@ public class Bacs {
 
     public static void main(String[] args) throws IOException {
         settings = Settings.fromProperties("conf.properties");
-        BattleField battleField = new BattleField(settings.dimension, settings.lumus);
-        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
-        Canvas playField = new Canvas(settings.dimension, settings.scale, battleField);
+//        BattleField battleField = new BattleField(settings.dimension, settings.lumus);
+//        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
+//        Canvas playField = new Canvas(battleField, settings.scale);
 
 //        MainFrame window;
-        SwingUtilities.invokeLater(() -> window = new MainFrame(title, settings, playField));
+        SwingUtilities.invokeLater(() -> window = new MainFrame(title, settings));
 //        window = new MainFrame(title, settings, playField);
 //
-        MoveIterator iterator = new MoveIterator(battleField, settings.dimension);    //Создание потока
+//        MoveIterator iterator = new MoveIterator(battleField, settings.dimension);    //Создание потока
 
-        while (iternum < settings.maxIterations) {
-//            window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
-            iterator.next();
-            iternum++;
-            SwingUtilities.invokeLater(() -> playField.repaint());
-        }
+//        while (iternum < settings.maxIterations) {
+////            window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100 / settings.maxIterations + "% done)");
+//            iterator.next();
+//            iternum++;
+//            System.out.println(iternum);
+////            SwingUtilities.invokeLater(() -> playField.repaint());
+//        }
 
-        window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(100% done)");
+//        window.setTitle(title + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(100% done)");
 
         float passed = (float) (System.nanoTime() - Bacs.start) / 1000000000;
 
 
-        try (FileWriter writer = new FileWriter("endgame.txt", false)) {
-            StringBuilder text = new StringBuilder();
-            for (int i = 0; i < 30; i++) {
-                BacUnit that = battleField.getCell(
-                        getRandom(0, settings.dimension - 1), getRandom(0, settings.dimension - 1));
-                text.append("str=" + that.str + " end=" + that.end + " clr=" + that.clr + " mut=" + that.mut + " behaviour={ ");
-                for (int j = 0; j < BacUnit.actlim; j++) {
-                    Command cmd = Command.fromCode(that.behaviour[j]);
-                    if (cmd != null) {
-                        text.append(cmd.getName() + " ");
-                    } else {
-                        text.append(that.behaviour[j] + " ");
-                    }
-                }
-                text.append("}" + '\r' + '\n');
-            }
-            text.append("time: " + passed);
-            writer.write(text.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+//        try (FileWriter writer = new FileWriter("endgame.txt", false)) {
+//            StringBuilder text = new StringBuilder();
+//            for (int i = 0; i < 30; i++) {
+//                BacUnit that = battleField.getCell(
+//                        getRandom(0, settings.dimension - 1), getRandom(0, settings.dimension - 1));
+//                text.append("str=" + that.str + " end=" + that.end + " clr=" + that.clr + " mut=" + that.mut + " behaviour={ ");
+//                for (int j = 0; j < BacUnit.actlim; j++) {
+//                    Command cmd = Command.fromCode(that.behaviour[j]);
+//                    if (cmd != null) {
+//                        text.append(cmd.getName() + " ");
+//                    } else {
+//                        text.append(that.behaviour[j] + " ");
+//                    }
+//                }
+//                text.append("}" + '\r' + '\n');
+//            }
+//            text.append("time: " + passed);
+//            writer.write(text.toString());
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//        }
     }
 
 //    static void initBattle() throws IOException {
