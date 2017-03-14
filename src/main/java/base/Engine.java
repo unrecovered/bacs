@@ -80,11 +80,15 @@ final class Engine {
         BattleField.Coords dir = BattleField.lookup[observer.direction];
         BacUnit target = battleField.getCell(x + dir.x, y + dir.y);
         if (target.clr.equals(CORPSE_CELL)) {
-            observer.action += 4;
+            eat(x, y, observer);
         } else if (!target.clr.equals(EMPTY_CELL)) {
-            observer.action += observer.clr.compareTo(target.clr) >= BacUnit.relsense ? 2 : 3;
+            if (observer.clr.compareTo(target.clr) >= BacUnit.relsense) {
+                attack(x, y, observer);
+            } else {
+                observer.gain();
+            }
         } else {
-            observer.action++;
+            move(x, y, observer);
         }
     }
 
@@ -94,6 +98,8 @@ final class Engine {
         if (attacker.clr.compareTo(defense.clr) >= BacUnit.relsense)
             if (getRandom(0, attacker.str + defense.str) <= attacker.str) {
                 corpse(defense);
+            } else {
+                corpse(attacker);
             }
     }
 
