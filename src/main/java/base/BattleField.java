@@ -72,13 +72,6 @@ public class BattleField {
         initial.changed = true;
     }
 
-    private int toNum(int x, int y) {
-        if ((x < 0) || (x >= dimension))
-            x = x % dimension;
-        if ((y < 0) || (y >= dimension))
-            y = y % dimension;
-        return y * dimension + x;
-    }
 
     private Coords normalize(int x, int y) {
         return new Coords((x + dimension) % dimension, (y + dimension) % dimension);
@@ -88,9 +81,6 @@ public class BattleField {
         Coords req = normalize(x, y);
         return cells[req.x][req.y];
     }
-//    public double getLight(int x, int y) {
-//        return lightTable.get(toNum(x - dimension / 2, y - dimension / 2));
-//    }
 
     public int getDimension() {
         return dimension;

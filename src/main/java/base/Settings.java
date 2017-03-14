@@ -1,6 +1,5 @@
 package base;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -23,10 +22,10 @@ public class Settings {
 
     String behaviour;
 
-    public static Settings fromProperties(String name) throws IOException {
+    static Settings fromProperties(String name) throws IOException {
         Settings settings = new Settings();
         Properties props = new Properties();
-        props.load(new FileReader(name));
+        props.load(Settings.class.getClassLoader().getResourceAsStream(name));
 
         settings.cores = Integer.valueOf(props.getProperty("settings.threads", "1"));
         if (settings.cores == 0)
