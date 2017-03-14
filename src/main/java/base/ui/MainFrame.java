@@ -29,18 +29,14 @@ public final class MainFrame extends JFrame {
 
     private final JButton stop;
 
-//     private String mytitle;
-
     public MainFrame(String title, Settings settings) {
         super(title);
-//        this.mytitle = title;
         this.settings = settings;
         battleField = new BattleField(settings.dimension, settings.lumus);
+        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
         playField = new Canvas(battleField, settings.scale);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         timer = new Timer(40, e1 -> playField.repaint());
-
-//        getContentPane().setLayout(new BorderLayout());
 
         JPanel canvasPanel = new JPanel(new BorderLayout(), true);
         canvasPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -58,6 +54,7 @@ public final class MainFrame extends JFrame {
                 run = true;
                 start.setEnabled(false);
                 stop.setEnabled(true);
+                battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
                 new Thread(() -> startAutoMove()).start();
             }
         });
@@ -83,14 +80,11 @@ public final class MainFrame extends JFrame {
     }
 
     private void startAutoMove() {
-        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
+
         MoveIterator moveIterator = new MoveIterator(battleField);
         int iternum = 0;
         while ((run) && (iternum < settings.maxIterations)) {
             iternum++;
-//            System.out.println("> " + String.valueOf(iternum) + " <");
-//            setTitle(mytitle + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100
-//                    / settings.maxIterations + "% done)");
             moveIterator.nextMove();
         }
     }

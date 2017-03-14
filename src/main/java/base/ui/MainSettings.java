@@ -4,7 +4,6 @@ import base.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 /**
  *  Панель настроек начальной конфигурации.
@@ -13,27 +12,27 @@ import java.awt.event.ActionEvent;
 public class MainSettings extends JPanel {
     private Settings settings;
 
-    private final JTextField cores = new JTextField();
+    private final JTextField cores = new JTextField(8);
 
-    private final JTextField dimension = new JTextField();
+    private final JTextField dimension = new JTextField(8);
 
-    private final JTextField scale = new JTextField();
+    private final JTextField scale = new JTextField(8);
 
-    private final JTextField maxIterations = new JTextField();
+    private final JTextField maxIterations = new JTextField(8);
 
     private final JCheckBox lumus = new JCheckBox("Равномерное освещение");
 
-    private final JTextField gainBase = new JTextField();
+    private final JTextField gainBase = new JTextField(8);
 
-    private final JTextField relSense = new JTextField();
+    private final JTextField relSense = new JTextField(8);
 
-    private final JTextField actLim = new JTextField();
+    private final JTextField actLim = new JTextField(8);
 
-    private final JTextField strength = new JTextField();
+    private final JTextField strength = new JTextField(8);
 
-    private final JTextField mutagen = new JTextField();
+    private final JTextField mutagen = new JTextField(8);
 
-    private final JTextField end = new JTextField();
+    private final JTextField end = new JTextField(8);
 
 
     MainSettings() {

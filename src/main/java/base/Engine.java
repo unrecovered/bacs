@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static base.utils.Random.*;
+import static base.utils.Random.getRandom;
+import static base.utils.Random.getRandomColorCode;
 
 /**
  * Основной класс движка
  * Created by valera on 10.03.17.
  */
-public class Engine {
-    private BattleField battleField;
-//    private Canvas visualizer;
-//    private int relsense;
+final class Engine {
+    private final String EMPTY_CELL = "000000";
+    private final String CORPSE_CELL = "FFFFFF";
 
-    public Engine(BattleField battleField) {
+    private BattleField battleField;
+
+    Engine(BattleField battleField) {
         this.battleField = battleField;
     }
 
-    public void process(int x, int y) {
+    void process(int x, int y) {
         BacUnit target = battleField.getCell(x, y);
 
         if (target.energy >= target.end) {
@@ -36,9 +38,9 @@ public class Engine {
         boolean nextMove = true;
         int counter = 0;
         while (nextMove) {
-            nextMove = counter < target.actlim;
+            nextMove = counter < BacUnit.actlim;
 
-        target.energy -= 1 + (float) target.str / 10;
+            target.energy -= 1 + (float) target.str / 10;
             if (target.energy <= 0) {
                 return;
             }
@@ -74,13 +76,13 @@ public class Engine {
         }
     }
 
-    void observe(int x, int y, BacUnit observer) {
+    private void observe(int x, int y, BacUnit observer) {
         BattleField.Coords dir = BattleField.lookup[observer.direction];
         BacUnit target = battleField.getCell(x + dir.x, y + dir.y);
-        if (target.clr.equals("FFFFFF")) {
+        if (target.clr.equals(CORPSE_CELL)) {
             observer.action += 4;
-        } else if (!target.clr.equals("000000")) {
-            observer.action += observer.clr.compareTo(target.clr) >= observer.relsense ? 2 : 3;
+        } else if (!target.clr.equals(EMPTY_CELL)) {
+            observer.action += observer.clr.compareTo(target.clr) >= BacUnit.relsense ? 2 : 3;
         } else {
             observer.action++;
         }
@@ -89,31 +91,25 @@ public class Engine {
     private void attack(int x, int y, BacUnit attacker) {
         BattleField.Coords dir = BattleField.lookup[attacker.direction];
         BacUnit defense = battleField.getCell(x + dir.x, y + dir.y);
-        if (attacker.clr.compareTo(defense.clr) >= attacker.relsense)
+        if (attacker.clr.compareTo(defense.clr) >= BacUnit.relsense)
             if (getRandom(0, attacker.str + defense.str) <= attacker.str) {
                 corpse(defense);
             }
     }
 
     private void eat(int x, int y, BacUnit devourer) {
-        BattleField.Coords dir = BattleField.lookup[getRandomDirection()];
-        BacUnit victim = battleField.getCell(x + dir.x, y + dir.y);
-        if (victim.clr.equals("FFFFFF")) {
+        List<BacUnit> victims = findNeighbors(x, y, CORPSE_CELL);
+        if (victims.size() > 0) {
+            BacUnit victim = victims.get(getRandom(0, victims.size() - 1));
             devourer.energy += victim.energy / 2;
             die(victim);
         }
     }
 
     private void move(int x, int y, BacUnit source) {
-//        List<BacUnit> corpse = new ArrayList<>();
-//        for (BattleField.Coords dd: BattleField.lookup) {
-//            BacUnit cell = battleField.getCell(x + dd.x, y + dd.y);
-//            if (cell.clr.equals("FFFFFF"))
-//                corpse.add(cell);
-//        }
-        BattleField.Coords dir = BattleField.lookup[source.direction];
-        BacUnit dest = battleField.getCell(x + dir.x, y + dir.y);
-        if (dest.clr.equals("000000")) {
+        List<BacUnit> targets = findNeighbors(x, y, EMPTY_CELL);
+        if (targets.size() > 0) {
+            BacUnit dest = targets.get(getRandom(0, targets.size() - 1));
             copy(source, dest);
             dest.changed = true;
             die(source);
@@ -121,12 +117,8 @@ public class Engine {
     }
 
     private void breed(int x, int y, BacUnit parent) {
-        List<BacUnit> emptyCells = new ArrayList<>(8);
-        for (BattleField.Coords dd : BattleField.lookup) {
-            BacUnit cell = battleField.getCell(x + dd.x, y + dd.y);
-            if (cell.clr.equals("000000")) //todo метка занятости клетки
-                emptyCells.add(cell);
-        }
+        List<BacUnit> emptyCells = findNeighbors(x, y, EMPTY_CELL);
+
         if (emptyCells.isEmpty()) {
             corpse(parent);
             return;
@@ -135,7 +127,7 @@ public class Engine {
         BacUnit newCell = emptyCells.get(pos);
         parent.energy = parent.energy / 2;
         copy(parent, newCell);
-        newCell.action = 0;
+
         newCell.direction = getRandom(0, 7);
         newCell.ticks = 0;
         newCell.changed = true;
@@ -174,5 +166,15 @@ public class Engine {
     private void corpse(BacUnit target) {
         target.clr = "FFFFFF";
         target.changed = true;
+    }
+
+    private List<BacUnit> findNeighbors(int x, int y, String code) {
+        List<BacUnit> cells = new ArrayList<>();
+        for (BattleField.Coords dd : BattleField.lookup) {
+            BacUnit cell = battleField.getCell(x + dd.x, y + dd.y);
+            if (cell.clr.equals(code)) //todo метка занятости клетки
+                cells.add(cell);
+        }
+        return cells;
     }
 }

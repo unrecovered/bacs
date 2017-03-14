@@ -8,6 +8,8 @@ public class BattleField {
 
     private final BacUnit[][] cells;
 
+    private boolean lumus;
+
     static final Coords[] lookup = new Coords[]{
             new Coords(0, -1),
             new Coords(1, -1),
@@ -35,9 +37,15 @@ public class BattleField {
     public BattleField(int dimension, boolean lumus) {
         this.dimension = dimension;
         this.halfSize = dimension / 2;
-
-        //Инициализация игрового поля
         cells = new BacUnit[dimension][dimension];
+        this.lumus = lumus;
+    }
+
+    /**
+     * Инициализация стартовой позиции
+     */
+    public void init(int energy, String color, int direction, int strength, int mutagen, int end) {
+
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 BacUnit bu = new BacUnit();
@@ -52,12 +60,7 @@ public class BattleField {
                 cells[i][j] = bu;
             }
         }
-    }
 
-    /**
-     * Инициализация стартовой позиции
-     */
-    public void init(int energy, String color, int direction, int strength, int mutagen, int end) {
         BacUnit initial = cells[halfSize][halfSize];
         initial.clr = color;
         initial.direction = direction;
