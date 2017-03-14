@@ -161,7 +161,7 @@ final class Engine {
 
         //мутация поведения
         int mutnum = getRandom(0, BacUnit.actlim - 1);
-        cell.behaviour[mutnum] = getRandom(0, BacUnit.actlim + 5);
+        cell.behaviour[mutnum] = getRandom(20, 25);
     }
 
     private void die(BacUnit target) {
