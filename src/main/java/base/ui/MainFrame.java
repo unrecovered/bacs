@@ -77,7 +77,7 @@ public final class MainFrame extends JFrame {
         add(buttons, BorderLayout.SOUTH);
         stop.setEnabled(false);
 
-        timer = new Timer(40, e1 -> {playField.repaint(); progress.repaint();});
+        timer = new Timer(40, e1 -> playField.repaint());
         settingsPane.setSettings(settings);
 
         pack();
