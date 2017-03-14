@@ -16,7 +16,7 @@ public final class MainFrame extends JFrame {
 
     private final MainSettings settingsPane = new MainSettings();
 
-    private final BattleField battleField;
+//    private final BattleField battleField;
 
     private final Canvas playField;
 
@@ -34,7 +34,7 @@ public final class MainFrame extends JFrame {
     public MainFrame(String title, Settings settings) {
         super(title);
         this.settings = settings;
-        battleField = new BattleField(settings.dimension, settings.lumus);
+        BattleField battleField = new BattleField(settings.dimension, settings.lumus);
         battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
         playField = new Canvas(battleField, settings.scale);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -58,7 +58,7 @@ public final class MainFrame extends JFrame {
                 run = true;
                 start.setEnabled(false);
                 stop.setEnabled(true);
-                battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
+//                battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
                 new Thread(() -> startAutoMove()).start();
             }
         });
@@ -85,10 +85,17 @@ public final class MainFrame extends JFrame {
     }
 
     private void startAutoMove() {
+        Settings settings = settingsPane.getSettings();
+        BattleField battleField = new BattleField(settings.dimension, settings.lumus);
+        battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
+        playField.setBattleField(battleField);
+        playField.setScale(settings.scale);
+        MoveIterator moveIterator = new MoveIterator(battleField);
+
         progress.setMinimum(0);
         progress.setMaximum(settings.maxIterations);
         progress.setStringPainted(true);
-        MoveIterator moveIterator = new MoveIterator(battleField);
+
         int iternum = 0;
         while ((run) && (iternum < settings.maxIterations)) {
             iternum++;

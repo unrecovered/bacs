@@ -8,21 +8,20 @@ import java.awt.*;
 
 public class Canvas extends JComponent {
 
-    private final int dimension;
+    private int dimension;
 
-    private final int scale;
+    private int scale;
 
-    private final BattleField battleField;
+    private Dimension size;
+
+    private BattleField battleField;
 
     Canvas(BattleField battleField, int scale) {
         this.battleField = battleField;
         this.dimension = battleField.getDimension();
         this.scale = scale;
-        Dimension d = new Dimension(dimension * scale, dimension * scale);
-        setSize(d);
-        setPreferredSize(d);
-        setMinimumSize(d);
-        setMaximumSize(d);
+        size = new Dimension(dimension * scale, dimension * scale);
+        setSize(size);
     }
 
 
@@ -48,5 +47,34 @@ public class Canvas extends JComponent {
                 current.changed = false;
             }
         }
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return size;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return size;
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return size;
+    }
+
+    void setScale(int scale) {
+        this.scale = scale;
+        this.dimension = battleField.getDimension();
+        this.size = new Dimension(dimension * scale, dimension * scale);
+        setSize(size);
+    }
+
+    void setBattleField(BattleField battleField) {
+        this.battleField = battleField;
+        this.dimension = battleField.getDimension();
+        this.size = new Dimension(dimension * scale, dimension * scale);
+        setSize(size);
     }
 }

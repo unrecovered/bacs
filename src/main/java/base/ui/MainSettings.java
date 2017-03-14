@@ -37,6 +37,12 @@ public class MainSettings extends JPanel {
 
     MainSettings() {
         super();
+
+        cores.setEnabled(false);
+        gainBase.setEnabled(false);
+        relSense.setEnabled(false);
+        actLim.setEnabled(false);
+
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         add(new JLabel("Число ядер процессора:"), getLabelGBC(0, 0));
@@ -62,7 +68,7 @@ public class MainSettings extends JPanel {
         add(end, getFieldGBC(1, 10));
     }
 
-    public void setSettings(Settings settings) {
+    void setSettings(Settings settings) {
         this.settings = settings;
         cores.setText(String.valueOf(settings.cores));
         dimension.setText(String.valueOf(settings.dimension));
@@ -77,7 +83,20 @@ public class MainSettings extends JPanel {
         end.setText(String.valueOf(settings.end));
     }
 
-    public void getSettings() {
+    Settings getSettings() {
+        Settings settings = new Settings();
+        settings.cores = Integer.valueOf(cores.getText());
+        settings.dimension = Integer.valueOf(dimension.getText());
+        settings.scale = Integer.valueOf(scale.getText());
+        settings.lumus = ! lumus.isSelected();
+        settings.maxIterations = Integer.valueOf(maxIterations.getText());
+        settings.gainBase = Integer.valueOf(gainBase.getText());
+        settings.actLim = Integer.valueOf(gainBase.getText());
+        settings.strength = Integer.valueOf(strength.getText());
+        settings.mutagen = Integer.valueOf(mutagen.getText());
+        settings.end = Integer.valueOf(end.getText());
+
+        return settings;
 
     }
 
