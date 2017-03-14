@@ -90,6 +90,7 @@ public final class MainFrame extends JFrame {
         battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
         playField.setBattleField(battleField);
         playField.setScale(settings.scale);
+        pack();
         MoveIterator moveIterator = new MoveIterator(battleField);
 
         progress.setMinimum(0);
