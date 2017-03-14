@@ -103,5 +103,9 @@ public final class MainFrame extends JFrame {
             progress.setValue(iternum);
             moveIterator.nextMove();
         }
+
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        timer.stop();
     }
 }
