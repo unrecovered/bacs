@@ -30,7 +30,7 @@ public class MoveIterator {
             int x = getRandom(0, dimension - 1);
             int y = getRandom(0, dimension - 1);
             processed.add(y * dimension + x);
-            if ((battleField.getCell(x, y).clr != "000000") && (battleField.getCell(x, y).clr != "FFFFFF")) {
+            if ((! battleField.getCell(x, y).clr.equals("000000")) && (!battleField.getCell(x, y).clr.equals("FFFFFF"))) {
                 engine.process(x, y);
             }
         }

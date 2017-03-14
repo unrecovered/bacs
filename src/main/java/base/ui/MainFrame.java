@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 /**
  * Created by valera on 08.03.17.
  */
-public class MainFrame extends JFrame {
+public final class MainFrame extends JFrame {
 
     private final MainSettings settingsPane = new MainSettings();
 
@@ -24,6 +24,10 @@ public class MainFrame extends JFrame {
 
     private Timer timer;
     private boolean run;
+
+    private final JButton start;
+
+    private final JButton stop;
 
 //     private String mytitle;
 
@@ -47,22 +51,30 @@ public class MainFrame extends JFrame {
         setContentPane(contentPanel);
 
         JPanel buttons = new JPanel(new FlowLayout());
-        buttons.add(new JButton(new AbstractAction("Go") {
+        start = new JButton(new AbstractAction("Go") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 timer.start();
                 run = true;
+                start.setEnabled(false);
+                stop.setEnabled(true);
                 new Thread(() -> startAutoMove()).start();
             }
-        }));
-        buttons.add(new JButton(new AbstractAction("Stop") {
+        });
+
+        stop = new JButton(new AbstractAction("Stop") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 run = false;
                 timer.stop();
+                start.setEnabled(true);
+                stop.setEnabled(false);
             }
-        }));
+        });
+        buttons.add(start);
+        buttons.add(stop);
         add(buttons, BorderLayout.SOUTH);
+        stop.setEnabled(false);
 
         settingsPane.setSettings(settings);
 
@@ -76,7 +88,7 @@ public class MainFrame extends JFrame {
         int iternum = 0;
         while ((run) && (iternum < settings.maxIterations)) {
             iternum++;
-            System.out.println("> " + String.valueOf(iternum) + " <");
+//            System.out.println("> " + String.valueOf(iternum) + " <");
 //            setTitle(mytitle + " MoveIterator " + iternum + " out of " + settings.maxIterations + "(" + iternum * 100
 //                    / settings.maxIterations + "% done)");
             moveIterator.nextMove();

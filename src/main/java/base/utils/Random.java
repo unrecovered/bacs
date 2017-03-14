@@ -18,11 +18,15 @@ public class Random {
     }
 
     public static String getRandomColorCode() {
-        return Integer.toHexString(getRandom(1, 16777214));
-//        return colors[getRandom(0, colors.length -1 )];
+//        return Integer.toHexString(getRandom(1, 16777214));
+        return colors[getRandom(0, colors.length -1 )];
     }
 
     public static int getRandomPercent() {
         return getRandom(0, 100);
+    }
+
+    public static int getRandomDirection() {
+        return getRandom(0, 7);
     }
 }

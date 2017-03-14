@@ -26,7 +26,7 @@ public class BacUnit {
         this.clr = "000000";
     }
 
-    public int getMyAction() {
+    int getMyAction() {
         action %= actlim;
         int actionCode = behaviour[action];
         action++;

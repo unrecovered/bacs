@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static base.utils.Random.getRandomColorCode;
-import static base.utils.Random.getRandom;
-import static base.utils.Random.getRandomPercent;
+import static base.utils.Random.*;
 
 /**
  * Основной класс движка
@@ -36,35 +34,35 @@ public class Engine {
 
         //Выполняем другие действия
         boolean nextMove = true;
-//        int counter = 0;
-//        while (nextMove) {
-//            nextMove = counter < target.actlim;
+        int counter = 0;
+        while (nextMove) {
+            nextMove = counter < target.actlim;
 
         target.energy -= 1 + (float) target.str / 10;
             if (target.energy <= 0) {
                 return;
             }
-//            counter++;
+            counter++;
             int commandCode = target.getMyAction();
             switch (commandCode) {
                 case 20:
                     move(x, y, target);
-//                    nextMove = false;
+                    nextMove = false;
                     break;
                 case 21:
                     target.turn(target.getMyAction());
                     break;
                 case 22:
                     eat(x, y, target);
-//                    nextMove = false;
+                    nextMove = false;
                     break;
                 case 23:
                     target.gain();
-//                    nextMove = false;
+                    nextMove = false;
                     break;
                 case 24:
                     attack(x, y, target);
-//                    nextMove = false;
+                    nextMove = false;
                     break;
                 case 25:
                     observe(x, y, target);
@@ -73,7 +71,7 @@ public class Engine {
                     target.action = commandCode;
                     break;
             }
-//        }
+        }
     }
 
     void observe(int x, int y, BacUnit observer) {
@@ -98,7 +96,7 @@ public class Engine {
     }
 
     private void eat(int x, int y, BacUnit devourer) {
-        BattleField.Coords dir = BattleField.lookup[devourer.direction];
+        BattleField.Coords dir = BattleField.lookup[getRandomDirection()];
         BacUnit victim = battleField.getCell(x + dir.x, y + dir.y);
         if (victim.clr.equals("FFFFFF")) {
             devourer.energy += victim.energy / 2;
@@ -107,6 +105,12 @@ public class Engine {
     }
 
     private void move(int x, int y, BacUnit source) {
+//        List<BacUnit> corpse = new ArrayList<>();
+//        for (BattleField.Coords dd: BattleField.lookup) {
+//            BacUnit cell = battleField.getCell(x + dd.x, y + dd.y);
+//            if (cell.clr.equals("FFFFFF"))
+//                corpse.add(cell);
+//        }
         BattleField.Coords dir = BattleField.lookup[source.direction];
         BacUnit dest = battleField.getCell(x + dir.x, y + dir.y);
         if (dest.clr.equals("000000")) {
@@ -131,13 +135,11 @@ public class Engine {
         BacUnit newCell = emptyCells.get(pos);
         parent.energy = parent.energy / 2;
         copy(parent, newCell);
-//        newCell.clr = parent.clr;
-        newCell.direction = getRandom(0, 7);
         newCell.action = 0;
+        newCell.direction = getRandom(0, 7);
         newCell.ticks = 0;
         newCell.changed = true;
-//        newCell.behaviour = Arrays.copyOf(parent.behaviour, 0);
-        if (getRandom(0, 1000) < newCell.mut)
+        if (getRandom(0, 1000) < parent.mut)
             mutate(newCell);
     }
 
@@ -149,11 +151,10 @@ public class Engine {
         dst.clr = src.clr;
         dst.direction = src.direction;
         dst.action = src.action;
-        dst.behaviour = Arrays.copyOf(src.behaviour, src.behaviour.length);
+        dst.behaviour = Arrays.copyOf(src.behaviour, BacUnit.actlim);
     }
 
     private void mutate(BacUnit cell) {
-//        System.out.println("--> Mutation!!! <--");
         cell.str += cell.str > 1 ? getRandom(-1, 1) : getRandom(0, 1);
         cell.end += getRandom(-1, 1);
 
@@ -161,8 +162,8 @@ public class Engine {
         cell.mut += getRandom(-1, 1);
 
         //мутация поведения
-        int mutnum = getRandom(0, cell.actlim - 1);
-        cell.behaviour[mutnum] = getRandom(20, 26);
+        int mutnum = getRandom(0, BacUnit.actlim - 1);
+        cell.behaviour[mutnum] = getRandom(0, BacUnit.actlim + 5);
     }
 
     private void die(BacUnit target) {
