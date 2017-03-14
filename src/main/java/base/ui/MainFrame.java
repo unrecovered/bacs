@@ -29,6 +29,8 @@ public final class MainFrame extends JFrame {
 
     private final JButton stop;
 
+    private final JProgressBar progress;
+
     public MainFrame(String title, Settings settings) {
         super(title);
         this.settings = settings;
@@ -36,7 +38,8 @@ public final class MainFrame extends JFrame {
         battleField.init(50, "FF0000", 0, settings.strength, settings.mutagen, settings.end);
         playField = new Canvas(battleField, settings.scale);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        timer = new Timer(40, e1 -> playField.repaint());
+
+        progress = new JProgressBar(JProgressBar.VERTICAL);
 
         JPanel canvasPanel = new JPanel(new BorderLayout(), true);
         canvasPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -44,6 +47,7 @@ public final class MainFrame extends JFrame {
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(canvasPanel, BorderLayout.CENTER);
         contentPanel.add(settingsPane, BorderLayout.EAST);
+        contentPanel.add(progress, BorderLayout.WEST);
         setContentPane(contentPanel);
 
         JPanel buttons = new JPanel(new FlowLayout());
@@ -73,6 +77,7 @@ public final class MainFrame extends JFrame {
         add(buttons, BorderLayout.SOUTH);
         stop.setEnabled(false);
 
+        timer = new Timer(40, e1 -> {playField.repaint(); progress.repaint();});
         settingsPane.setSettings(settings);
 
         pack();
@@ -80,11 +85,14 @@ public final class MainFrame extends JFrame {
     }
 
     private void startAutoMove() {
-
+        progress.setMinimum(0);
+        progress.setMaximum(settings.maxIterations);
+        progress.setStringPainted(true);
         MoveIterator moveIterator = new MoveIterator(battleField);
         int iternum = 0;
         while ((run) && (iternum < settings.maxIterations)) {
             iternum++;
+            progress.setValue(iternum);
             moveIterator.nextMove();
         }
     }
