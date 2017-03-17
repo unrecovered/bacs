@@ -135,6 +135,7 @@ final class Engine {
         copy(parent, newCell);
 
         newCell.direction = getRandom(0, 7);
+        newCell.action = 0;
         newCell.ticks = 0;
         newCell.changed = true;
         if (getRandom(0, 1000) < parent.mut)
