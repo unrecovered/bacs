@@ -6,7 +6,7 @@ package base;
  */
 public class BattleField {
 
-    private final BacUnit[][] cells;
+    private final BacUnit[] cells;
 
     private boolean lumus;
 
@@ -37,7 +37,7 @@ public class BattleField {
     public BattleField(int dimension, boolean lumus) {
         this.dimension = dimension;
         this.halfSize = dimension / 2;
-        cells = new BacUnit[dimension][dimension];
+        cells = new BacUnit[dimension * dimension];
         this.lumus = lumus;
     }
 
@@ -46,22 +46,20 @@ public class BattleField {
      */
     public void init(int energy, String color, int direction, int strength, int mutagen, int end) {
 
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
+        for (int i = 0; i < dimension * dimension; i++) {
                 BacUnit bu = new BacUnit();
                 bu.clr = "000000";
                 if (lumus) {
-                    bu.light = calculateLight(i, j, halfSize, halfSize);
+                    bu.light = calculateLight(i, halfSize, halfSize);
                 } else {
                     bu.light = 1;
                 }
                 bu.behaviour = new int[23];
                 bu.changed = true;
-                cells[i][j] = bu;
-            }
+            cells[i] = bu;
         }
 
-        BacUnit initial = cells[halfSize][halfSize];
+        BacUnit initial = getCell(halfSize, halfSize);
         initial.clr = color;
         initial.direction = direction;
         initial.str = strength;
@@ -79,7 +77,7 @@ public class BattleField {
 
     public BacUnit getCell(int x, int y) {
         Coords req = normalize(x, y);
-        return cells[req.x][req.y];
+        return cells[req.x + req.y * dimension];
     }
 
     public int getDimension() {
@@ -89,13 +87,14 @@ public class BattleField {
     /**
      * Расчет коэффициента освещенности клетки поля.
      *
-     * @param x  координата клетки по оси x
-     * @param y  координата клетки по оси y
+     * @param i  индекс клетки
      * @param xc x-координата источника освещения
      * @param yc y-координата источника освещения
      * @return рассчитанный коэффициент клетки поля
      */
-    private static double calculateLight(int x, int y, int xc, int yc) {
+    private double calculateLight(int i, int xc, int yc) {
+        int x = i % dimension;
+        int y = i / dimension;
         int dx = xc - x;
         int dy = yc - y;
         double delta = Math.sqrt(dx * dx + dy * dy);
