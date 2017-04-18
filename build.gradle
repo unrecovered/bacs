@@ -1,0 +1,24 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
+
+version = '1.12'
+
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "base.Bacs"
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+}

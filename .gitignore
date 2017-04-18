@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.*
+.class
+*.jar
+build/
+endgame.txt
+!/.gitignore
